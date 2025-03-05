@@ -15,16 +15,16 @@ chrome.runtime.onInstalled.addListener(() => {
   // Create context menu items
   chrome.contextMenus.create({
     id: 'languageMenu',
-    title: 'Target Language',
+    title: '🌐 Target Language',
     contexts: ['action']
   });
 
   const languages = [
-    { code: 'fr', name: 'French' },
-    { code: 'en', name: 'English' },
-    { code: 'es', name: 'Spanish' },
-    { code: 'de', name: 'German' },
-    { code: 'it', name: 'Italian' }
+    { code: 'fr', name: '🇫🇷 French' },
+    { code: 'en', name: '🇬🇧 English' },
+    { code: 'es', name: '🇪🇸 Spanish' },
+    { code: 'de', name: '🇩🇪 German' },
+    { code: 'it', name: '🇮🇹 Italian' }
   ];
 
   languages.forEach(lang => {
@@ -39,7 +39,7 @@ chrome.runtime.onInstalled.addListener(() => {
 
   chrome.contextMenus.create({
     id: 'autoTranslate',
-    title: 'Auto-translate on selection',
+    title: '🔄 Auto-translate on selection',
     type: 'checkbox',
     contexts: ['action']
   });
