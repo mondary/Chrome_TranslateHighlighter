@@ -14,7 +14,10 @@ function createTranslationPopup(translation, isLoading = false) {
   popup.style.borderRadius = '4px';
   popup.style.zIndex = '10000';
   popup.style.boxShadow = '0 2px 4px rgba(0,0,0,0.2)';
-
+  popup.style.whiteSpace = 'pre-wrap';
+  popup.style.wordWrap = 'break-word';
+  popup.style.overflow = 'hidden';
+  
   if (isLoading) {
     const spinner = document.createElement('div');
     spinner.style.display = 'inline-block';
@@ -41,7 +44,7 @@ function createTranslationPopup(translation, isLoading = false) {
   return popup;
 }
 
-// Function to position the popup always under the last selected phrase
+// Function to position the popup always under the last selected phrase and match width
 function positionPopup(popup) {
   const selection = window.getSelection();
   if (selection.rangeCount === 0) {
@@ -52,6 +55,8 @@ function positionPopup(popup) {
 
   let top = rect.bottom + window.scrollY + 5;
   let left = rect.left + window.scrollX;
+
+  popup.style.width = `${rect.width}px`;
 
   const popupHeight = popup.offsetHeight;
   if ((top + popupHeight) > (window.scrollY + window.innerHeight)) {
