@@ -1,15 +1,18 @@
 // Default settings
 const DEFAULT_SETTINGS = {
   targetLanguage: 'fr',
-  autoTranslate: true
+  autoTranslate: true,
+  substituteTranslate: false
 };
 
 // Initialize settings
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.sync.get(['targetLanguage', 'autoTranslate'], (result) => {
-    if (!result.targetLanguage || !result.autoTranslate) {
-      chrome.storage.sync.set(DEFAULT_SETTINGS);
-    }
+    const settings = {
+      targetLanguage: result.targetLanguage || DEFAULT_SETTINGS.targetLanguage,
+      autoTranslate: result.autoTranslate === undefined ? DEFAULT_SETTINGS.autoTranslate : result.autoTranslate
+    };
+    chrome.storage.sync.set(settings);
   });
 
   // Create context menu items
@@ -43,6 +46,13 @@ chrome.runtime.onInstalled.addListener(() => {
     type: 'checkbox',
     contexts: ['action']
   });
+
+  chrome.contextMenus.create({
+    id: 'substituteTranslate',
+    title: '🔁 Substitute translation',
+    type: 'checkbox',
+    contexts: ['action']
+  });
 });
 
 // Handle context menu clicks
@@ -61,6 +71,13 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     chrome.tabs.sendMessage(tab.id, { 
       action: 'updateSettings', 
       settings: { autoTranslate: info.checked }
+    });
+  } else if (info.menuItemId === 'substituteTranslate') {
+    chrome.storage.sync.set({ substituteTranslate: info.checked });
+    // Notify content script of substitute-translate setting change
+    chrome.tabs.sendMessage(tab.id, { 
+      action: 'updateSettings', 
+      settings: { substituteTranslate: info.checked }
     });
   }
 });

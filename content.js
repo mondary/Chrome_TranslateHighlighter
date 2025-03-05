@@ -7,7 +7,8 @@ let isTranslatingPage = false;
 // Settings variables
 let settings = {
   targetLanguage: 'fr',
-  autoTranslate: true
+  autoTranslate: true,
+  substituteTranslate: false
 };
 
 // Load settings from storage
@@ -68,15 +69,22 @@ function positionPopup(popup) {
   let top = rect.bottom + window.scrollY + 5;
   let left = rect.left + window.scrollX;
 
-  popup.style.width = `${rect.width}px`;
+  // Remove fixed width setting to allow popup to expand based on content
+  popup.style.width = 'auto';
+  popup.style.maxWidth = `${window.innerWidth - 20}px`;
 
   const popupHeight = popup.offsetHeight;
   if ((top + popupHeight) > (window.scrollY + window.innerHeight)) {
     top = (rect.bottom + window.scrollY) - popupHeight - 5;
   }
 
-  if ((left + popup.offsetWidth) > (window.scrollX + window.innerWidth)) {
-    left = (window.scrollX + window.innerWidth) - popup.offsetWidth - 10;
+  // Center the popup if it's wider than the selected text
+  const popupWidth = popup.offsetWidth;
+  if (popupWidth > rect.width) {
+    left = Math.max(10, rect.left + window.scrollX - (popupWidth - rect.width) / 2);
+    if ((left + popupWidth) > (window.scrollX + window.innerWidth - 10)) {
+      left = window.scrollX + window.innerWidth - popupWidth - 10;
+    }
   }
 
   popup.style.position = 'absolute';
@@ -121,17 +129,32 @@ document.addEventListener('mouseup', async function(event) {
   if (selectedText) {
     console.log('Starting translation process');
     currentSelection = selectedText;
-    currentPopup = createTranslationPopup('', true);
-    positionPopup(currentPopup);
+    
+    if (settings.substituteTranslate) {
+      const selection = window.getSelection();
+      const range = selection.getRangeAt(0);
+      const loadingSpan = document.createElement('span');
+      loadingSpan.textContent = 'Traduction en cours...';
+      range.deleteContents();
+      range.insertNode(loadingSpan);
+      
+      currentTranslation = await translateText(selectedText);
+      console.log('Received translation:', currentTranslation);
+      
+      loadingSpan.textContent = currentTranslation;
+    } else {
+      currentPopup = createTranslationPopup('', true);
+      positionPopup(currentPopup);
 
-    currentTranslation = await translateText(selectedText);
-    console.log('Received translation:', currentTranslation);
+      currentTranslation = await translateText(selectedText);
+      console.log('Received translation:', currentTranslation);
 
-    if (currentPopup) {
-      currentPopup.remove();
+      if (currentPopup) {
+        currentPopup.remove();
+      }
+      currentPopup = createTranslationPopup(currentTranslation);
+      positionPopup(currentPopup);
     }
-    currentPopup = createTranslationPopup(currentTranslation);
-    positionPopup(currentPopup);
   }
 });
 
