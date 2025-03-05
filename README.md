@@ -1,29 +1,24 @@
-# Chrome Translate Highlighter
+# PKtraduction
+## Version 2025.03
 
 ## Description
-This Chrome extension automatically translates selected text to French and displays the translation in a popup near the selected text.
+This Chrome extension automatically translates selected text to French and displays the translation in a popup near the selected text. It also offers the ability to translate entire web pages with a single click.
 
 ## Features
 - Instant translation of selected text
+- Full page translation capability
 - Clean and minimal popup design
 - Automatic positioning of translation popup
 - Loading indicator while translation is in progress
-
-## Installation
-1. Download or clone this repository
-2. Open Chrome and go to `chrome://extensions/`
-3. Enable "Developer mode" in the top right corner
-4. Click "Load unpacked" and select the extension directory
+- Batch processing for efficient page translation
 
 ## Usage
-1. Select any text on a webpage
-2. The translation will appear in a popup near the selected text
-3. Click outside the popup to dismiss it
+1. Text Selection Translation:
+   - Select any text on a webpage
+   - The translation will appear in a popup near the selected text
+   - Click outside the popup to dismiss it
 
-## Troubleshooting
-- If translations don't appear, ensure you have internet connection
-- Make sure the extension is enabled in `chrome://extensions/`
-- Check the browser console for any error messages
-
-## License
-MIT License
+2. Full Page Translation:
+   - Click the extension icon in your browser toolbar
+   - Wait for the translation process to complete
+   - The entire page will be translated to French

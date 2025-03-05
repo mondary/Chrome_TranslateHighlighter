@@ -1,7 +1,8 @@
-// Variable to store the current popup, selection, and translation
+// Variables to store the current popup, selection, and translation
 let currentPopup = null;
 let currentSelection = null;
 let currentTranslation = '';
+let isTranslatingPage = false;
 
 // Function to create and show the translation popup
 function createTranslationPopup(translation, isLoading = false) {
@@ -134,5 +135,60 @@ document.addEventListener('mousedown', function(event) {
     currentPopup = null;
     currentSelection = null;
     currentTranslation = '';
+  }
+});
+
+// Function to get all text nodes in the document
+function getTextNodes(node) {
+  const textNodes = [];
+  const walk = document.createTreeWalker(node, NodeFilter.SHOW_TEXT, null, false);
+  let currentNode;
+  while (currentNode = walk.nextNode()) {
+    if (currentNode.parentElement.tagName !== 'SCRIPT' && 
+        currentNode.parentElement.tagName !== 'STYLE' &&
+        currentNode.textContent.trim() !== '') {
+      textNodes.push(currentNode);
+    }
+  }
+  return textNodes;
+}
+
+// Function to translate the entire page
+async function translatePage() {
+  if (isTranslatingPage) return;
+  isTranslatingPage = true;
+
+  const textNodes = getTextNodes(document.body);
+  const batchSize = 10;
+  const originalTexts = new Map();
+
+  for (let i = 0; i < textNodes.length; i += batchSize) {
+    const batch = textNodes.slice(i, i + batchSize);
+    const texts = batch.map(node => node.textContent.trim());
+    const translationPromises = texts.map(text => translateText(text));
+
+    try {
+      const translations = await Promise.all(translationPromises);
+      batch.forEach((node, index) => {
+        if (!originalTexts.has(node)) {
+          originalTexts.set(node, node.textContent);
+        }
+        node.textContent = translations[index];
+      });
+    } catch (error) {
+      console.error('Error translating batch:', error);
+    }
+
+    // Add a small delay between batches to avoid overwhelming the API
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+
+  isTranslatingPage = false;
+}
+
+// Listen for messages from the background script
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === 'translatePage') {
+    translatePage();
   }
 });

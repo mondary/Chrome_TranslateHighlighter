@@ -1,15 +1,19 @@
 {
   "manifest_version": 3,
-  "name": "Text Translator to French",
-  "version": "2025.02",
+  "name": "PKtraduction",
+  "version": "2025.03",
   "description": "Automatically translates highlighted text to French",
   "permissions": [
     "activeTab",
-    "storage"
+    "storage",
+    "scripting"
   ],
   "host_permissions": [
     "https://translate.googleapis.com/*"
   ],
+  "background": {
+    "service_worker": "background.js"
+  },
   "content_scripts": [{
     "matches": ["<all_urls>"],
     "js": ["content.js"]
