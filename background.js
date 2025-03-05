@@ -41,17 +41,24 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 
   chrome.contextMenus.create({
-    id: 'autoTranslate',
-    title: '🔄 Auto-translate on selection',
-    type: 'checkbox',
+    id: 'translationMode',
+    title: '🔄 Translation Mode',
     contexts: ['action']
   });
 
-  chrome.contextMenus.create({
-    id: 'substituteTranslate',
-    title: '🔁 Substitute translation',
-    type: 'checkbox',
-    contexts: ['action']
+  const translationModes = [
+    { id: 'popup', name: '🔍 Show in Popup' },
+    { id: 'substitute', name: '🔁 Replace Text' }
+  ];
+
+  translationModes.forEach(mode => {
+    chrome.contextMenus.create({
+      id: `mode_${mode.id}`,
+      parentId: 'translationMode',
+      title: mode.name,
+      type: 'radio',
+      contexts: ['action']
+    });
   });
 });
 
@@ -65,19 +72,17 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
       action: 'updateSettings', 
       settings: { targetLanguage: language }
     });
-  } else if (info.menuItemId === 'autoTranslate') {
-    chrome.storage.sync.set({ autoTranslate: info.checked });
-    // Notify content script of auto-translate setting change
-    chrome.tabs.sendMessage(tab.id, { 
-      action: 'updateSettings', 
-      settings: { autoTranslate: info.checked }
-    });
-  } else if (info.menuItemId === 'substituteTranslate') {
-    chrome.storage.sync.set({ substituteTranslate: info.checked });
-    // Notify content script of substitute-translate setting change
-    chrome.tabs.sendMessage(tab.id, { 
-      action: 'updateSettings', 
-      settings: { substituteTranslate: info.checked }
+  } else if (info.menuItemId.startsWith('mode_')) {
+    const mode = info.menuItemId.replace('mode_', '');
+    const settings = {
+      autoTranslate: true,
+      substituteTranslate: mode === 'substitute'
+    };
+    chrome.storage.sync.set(settings);
+    // Notify content script of translation mode change
+    chrome.tabs.sendMessage(tab.id, {
+      action: 'updateSettings',
+      settings: settings
     });
   }
 });

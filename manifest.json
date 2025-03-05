@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "PKtraduction",
-  "version": "2025.03",
-  "description": "Automatically translates highlighted text to French",
+  "version": "2025.04",
+  "description": "Instantly translates text with popup display or direct text substitution",
   "permissions": [
     "activeTab",
     "storage",
