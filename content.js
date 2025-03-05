@@ -4,6 +4,17 @@ let currentSelection = null;
 let currentTranslation = '';
 let isTranslatingPage = false;
 
+// Settings variables
+let settings = {
+  targetLanguage: 'fr',
+  autoTranslate: true
+};
+
+// Load settings from storage
+chrome.storage.sync.get(['targetLanguage', 'autoTranslate'], (result) => {
+  settings = { ...settings, ...result };
+});
+
 // Function to create and show the translation popup
 function createTranslationPopup(translation, isLoading = false) {
   console.log('Creating translation popup with text:', translation);
@@ -76,7 +87,7 @@ function positionPopup(popup) {
 // Function to translate text using Google Translate API
 async function translateText(text) {
   console.log('Attempting to translate text:', text);
-  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=fr&dt=t&q=${encodeURIComponent(text)}`;
+  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${settings.targetLanguage}&dt=t&q=${encodeURIComponent(text)}`;
   try {
     console.log('Sending translation request to:', url);
     const response = await fetch(url);
@@ -95,6 +106,10 @@ document.addEventListener('mouseup', async function(event) {
   console.log('Mouse up event detected');
   const selectedText = window.getSelection().toString().trim();
   console.log('Selected text:', selectedText);
+  
+  if (!settings.autoTranslate) {
+    return;
+  }
 
   if (currentPopup) {
     currentPopup.remove();
@@ -190,5 +205,8 @@ async function translatePage() {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'translatePage') {
     translatePage();
+  } else if (request.action === 'updateSettings') {
+    settings = { ...settings, ...request.settings };
+    console.log('Settings updated:', settings);
   }
 });
