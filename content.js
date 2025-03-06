@@ -69,22 +69,13 @@ function positionPopup(popup) {
   let top = rect.bottom + window.scrollY + 5;
   let left = rect.left + window.scrollX;
 
-  // Remove fixed width setting to allow popup to expand based on content
-  popup.style.width = 'auto';
+  // Set popup width to match selection width
+  popup.style.width = `${rect.width}px`;
   popup.style.maxWidth = `${window.innerWidth - 20}px`;
 
   const popupHeight = popup.offsetHeight;
   if ((top + popupHeight) > (window.scrollY + window.innerHeight)) {
     top = (rect.bottom + window.scrollY) - popupHeight - 5;
-  }
-
-  // Center the popup if it's wider than the selected text
-  const popupWidth = popup.offsetWidth;
-  if (popupWidth > rect.width) {
-    left = Math.max(10, rect.left + window.scrollX - (popupWidth - rect.width) / 2);
-    if ((left + popupWidth) > (window.scrollX + window.innerWidth - 10)) {
-      left = window.scrollX + window.innerWidth - popupWidth - 10;
-    }
   }
 
   popup.style.position = 'absolute';
