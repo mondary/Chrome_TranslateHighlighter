@@ -1,62 +1,45 @@
 # PKtraduction
-## Version 2025.04
 
-# English Version 🇬🇧
+![PKtraduction](store/icon.png)
 
-## Description
-This Chrome extension provides instant text translation with two convenient modes: popup display and direct text substitution. It supports multiple target languages and offers full page translation capabilities.
+[🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md)
 
-## Features
-- Instant translation of selected text
-- Full page translation capability
-- Clean and minimal popup design
-- Automatic positioning of translation popup
-- Loading indicator while translation is in progress
-- Batch processing for efficient page translation
+Traduction instantanée de texte avec affichage en popup ou substitution directe.
 
-## Usage
-1. Text Selection Translation (Two Modes):
-   - Popup Mode:
-     * Select any text on a webpage
-     * The translation appears in a popup near the selected text
-     * Click outside the popup to dismiss it
-   - Text Substitution Mode:
-     * Select any text on a webpage
-     * The selected text is directly replaced with its translation
-     * Perfect for reading through translated content
+## ✅ Fonctionnalités
+- Traduction instantanée du texte sélectionné.
+- Mode de substitution directe du texte.
+- Traduction de page entière par lots.
+- Indicateur de chargement en temps réel.
+- Interface épurée et positionnement automatique.
 
-2. Full Page Translation:
-   - Click the extension icon in your browser toolbar
-   - Wait for the translation process to complete
-   - The entire page will be translated to French
+## 🧠 Utilisation
+- **Traduction popup :** Sélectionnez du texte sur une page web, le popup s'affiche automatiquement en dessous.
+- **Substitution directe :** Activez l'option dans les paramètres, le texte sélectionné sera remplacé.
+- **Traduction de page :** Cliquez sur l'icône de l'extension pour traduire tout le contenu de la page active.
 
----
+## ⚙️ Réglages
+- Langue cible (défaut : français).
+- Mode de traduction automatique.
+- Option de substitution directe.
 
-# Version Française 🇫🇷
+## 🧾 Commandes
+- Clic gauche sur l'icône : déclenche la traduction de page.
+- Sélection de texte : déclenche la traduction rapide.
 
-## Description
-Cette extension Chrome offre une traduction instantanée du texte avec deux modes pratiques : l'affichage en popup et la substitution directe du texte. Elle prend en charge plusieurs langues cibles et propose des fonctionnalités de traduction de page complète.
+## 📦 Build & Package
+- Les fichiers sources sont situés dans `/src`.
+- Les assets sont situés dans `/store`.
+- Un build compressé est disponible dans `/release/extension.zip`.
 
-## Fonctionnalités
-- Traduction instantanée du texte sélectionné
-- Capacité de traduction de page complète
-- Design de popup épuré et minimaliste
-- Positionnement automatique du popup de traduction
-- Indicateur de chargement pendant la traduction
-- Traitement par lots pour une traduction efficace
+## 🧪 Installation (Antigravity)
+1. Téléchargez ou clonez ce dépôt.
+2. Ouvrez `chrome://extensions/` dans Chrome.
+3. Activez le **Mode développeur**.
+4. Cliquez sur **Charger l'extension non empaquetée** et sélectionnez le dossier `/src`.
 
-## Utilisation
-1. Traduction de texte sélectionné (Deux modes) :
-   - Mode Popup :
-     * Sélectionnez n'importe quel texte sur une page web
-     * La traduction apparaît dans un popup près du texte sélectionné
-     * Cliquez en dehors du popup pour le fermer
-   - Mode Substitution de texte :
-     * Sélectionnez n'importe quel texte sur une page web
-     * Le texte sélectionné est directement remplacé par sa traduction
-     * Parfait pour lire du contenu traduit
+## 🧾 Changelog
+- 2025.04 : Réorganisation de la structure, correction de contrastes CSS, ajout de la gestion des builds.
 
-2. Traduction de page complète :
-   - Cliquez sur l'icône de l'extension dans la barre d'outils de votre navigateur
-   - Attendez que le processus de traduction soit terminé
-   - La page entière sera traduite en français
+## 🔗 Liens
+- EN README : [README_en.md](README_en.md)
