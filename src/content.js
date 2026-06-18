@@ -23,6 +23,7 @@ function createTranslationPopup(translation, isLoading = false) {
   popup.style.position = 'fixed';
   popup.style.padding = '10px';
   popup.style.background = 'white';
+  popup.style.color = 'black';
   popup.style.border = '1px solid #ccc';
   popup.style.borderRadius = '4px';
   popup.style.zIndex = '10000';
