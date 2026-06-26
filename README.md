@@ -43,4 +43,4 @@ Traduction instantanée de texte avec affichage en popup ou substitution directe
 
 ## 🔗 Liens
 - EN README : [README_en.md](README_en.md)
-- Politique de confidentialité : [store/privacy-policy-pk-chrome-shortcuts.html](store/privacy-policy-pk-chrome-shortcuts.html)
+- Politique de confidentialité : [store/privacy-policy-pktraduction.html](store/privacy-policy-pktraduction.html)

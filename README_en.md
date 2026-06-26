@@ -43,4 +43,4 @@ Instantly translate text with popup display or direct text substitution.
 
 ## 🔗 Links
 - FR README: [README.md](README.md)
-- Privacy policy: [store/privacy-policy-pk-chrome-shortcuts.html](store/privacy-policy-pk-chrome-shortcuts.html)
+- Privacy policy: [store/privacy-policy-pktraduction.html](store/privacy-policy-pktraduction.html)
