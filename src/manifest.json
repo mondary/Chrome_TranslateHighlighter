@@ -1,8 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "PKtraduction",
-  "version": "2026.06.1",
-  "description": "Instantly translates text with popup display or direct text substitution",
+  "name": "PK Traduction",
+  "version": "2026.06.2",
+  "description": "Instant translation with popup display. Made by PK-Labs.",
+  "short_name": "PK-Labs Trad",
   "permissions": [
     "activeTab",
     "storage",

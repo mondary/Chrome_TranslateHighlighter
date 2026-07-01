@@ -1,10 +1,10 @@
-# PKtraduction
+# PK Traduction
 
 ![PKtraduction](store/icon.png)
 
 [🇫🇷 FR](README.md) · [🇬🇧 EN](README_en.md)
 
-Traduction instantanée de texte avec affichage en popup ou substitution directe.
+Traduction instantanée de texte avec affichage en popup ou substitution directe. Made by PK-Labs.
 
 ## ✅ Fonctionnalités
 - Traduction instantanée du texte sélectionné.
@@ -39,8 +39,13 @@ Traduction instantanée de texte avec affichage en popup ou substitution directe
 4. Cliquez sur **Charger l'extension non empaquetée** et sélectionnez le dossier `/src`.
 
 ## 🧾 Changelog
-- 2025.04 : Réorganisation de la structure, correction de contrastes CSS, ajout de la gestion des builds.
+- 2026.06.2 : Mise à jour branding PK-Labs, noms cohérents et descriptions optimisées. Ajout icônes manquantes dans le package.
+- 2026.06.1 : Réorganisation de la structure, correction de contrastes CSS, ajout de la gestion des builds.
+- 2025.04 : Version initiale
 
 ## 🔗 Liens
+- **Chrome Web Store** : [PK Traduction](https://chromewebstore.google.com/detail/)
+- **Politique de confidentialité** : [store/privacy-policy-pktraduction.html](store/privacy-policy-pktraduction.html)
+- **Site** : [mondary.design](https://mondary.design)
+- **Description** : [store/DESCRIPTION.md](store/DESCRIPTION.md)
 - EN README : [README_en.md](README_en.md)
-- Politique de confidentialité : [store/privacy-policy-pktraduction.html](store/privacy-policy-pktraduction.html)
