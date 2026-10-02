@@ -6,7 +6,7 @@
 
 Instantly translate text with popup display or direct text substitution. Made by PK-Labs.
 
-**Landing:** [store/index.html](store/index.html) — **v2026.10.02**
+**Landing:** [store/index.html](store/index.html) — **v2026.10.4**
 
 ![Selection → popup](store/screenshots/01-selection-popup.png)
 

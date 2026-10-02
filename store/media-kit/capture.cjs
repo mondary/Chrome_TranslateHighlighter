@@ -156,11 +156,11 @@ async function main() {
 
     // phrase sur une seule ligne pour la sélection souris
     const CANDIDATES = [
-      ['p3', 'sounds the great horn twice each minute'],
-      ['p3', 'the great horn twice'],
-      ['p3', 'sounds the great horn'],
-      ['p1', 'swept its white beam across the water'],
-      ['p1', 'its white beam'],
+      ['p3', 'The beam crosses the water every seven seconds'],
+      ['p3', 'The beam crosses the water'],
+      ['p3', 'every seven seconds, night after night'],
+      ['p1', 'The road ends at the last farm gate'],
+      ['p1', 'The road ends at the last farm gate, and the rest'],
     ];
     let sel = null, selEl = null;
     for (const [el, ph] of CANDIDATES) {
@@ -195,8 +195,9 @@ async function main() {
     await page.evaluate((el) => document.getElementById(el).scrollIntoView({ block: 'center' }), 'p2');
     await sleep(300);
     const subPhrases = [
-      ['p2', 'winds the old brass clockwork'],
-      ['p2', 'the old brass clockwork'],
+      ['p2', 'The tower was built in 1864 by a shipping company'],
+      ['p2', 'The tower was built in 1864'],
+      ['p2', 'by a shipping company that no longer exists'],
     ];
     let sub = null;
     for (const [el, ph] of subPhrases) {
@@ -229,7 +230,7 @@ async function main() {
     }, tabId);
     await page.waitForFunction(() => {
       const t = document.body.innerText.toLowerCase();
-      return !t.includes('lighthouse') && !t.includes('gazette keeps') && t.length > 200;
+      return !t.includes('the road ends at the last farm gate') && !t.includes('seven seconds') && t.length > 200;
     }, { timeout: 90000, polling: 500 });
     await sleep(600);
     await page.screenshot({ path: path.join(STORE, 'screenshots', '03-page-traduite.png') });

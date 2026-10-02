@@ -6,7 +6,7 @@
 
 Traduction instantanée de texte avec affichage en popup ou substitution directe. Made by PK-Labs.
 
-**Landing :** [store/index.html](store/index.html) — **v2026.10.02**
+**Landing :** [store/index.html](store/index.html) — **v2026.10.4**
 
 ![Sélection → popup](store/screenshots/01-selection-popup.png)
 

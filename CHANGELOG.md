@@ -1,5 +1,18 @@
 # Changelog
 
+## [2026.10.04] - 2026-10-02
+### Changed
+- Landing refaite sur une nouvelle direction visuelle (tokens `#0a0a0a / #111 / liseré .11`,
+  typo système tracking -.065em, sections hero → 3 usages → avant/après → réglages → prix → FAQ
+  → installation → footer en colonnes)
+- Captures, GIF et MP4 refaits sur une nouvelle page de démonstration éditoriale sombre
+  (« The Aurelle Review », photo domaine public) — l'ancienne page beige est archivée
+- Photo PD ajoutée et crédits documentés dans `store/media-kit/README.md`
+### Fixed
+- `manifest.version` sans zéro initial : Chrome réinterprétait `2026.10.02` en `2026.10.2` et
+  affichait l'avertissement « The extension version is parsed as… » (CalVer à 2 chiffres incompatible)
+- `img { height:auto }` sur la landing : les vignettes étaient étirées par l'attribut `height` HTML
+
 ## [2026.10.02] - 2026-10-02
 ### Added
 - Landing bilingue FR/EN `store/index.html` (captures réelles, mouvement réduit, sans-JS, Ko-fi)

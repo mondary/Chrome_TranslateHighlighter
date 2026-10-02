@@ -89,7 +89,7 @@ async function main() {
       await page.evaluate(() => window.scrollTo(0, 0));
       await new Promise(r => setTimeout(r, 300));
       await page.screenshot({ path: path.join(QA, 'landing-nojs-1440.png'), fullPage: true });
-      const visibleFr = await page.evaluate(() => document.body.innerText.includes('Sélectionnez du texte'));
+      const visibleFr = await page.evaluate(() => document.body.innerText.includes('Sélectionnez un mot'));
       log('sans JS — FR lisible :', visibleFr ? 'OK' : 'KO');
       await page.close();
     }

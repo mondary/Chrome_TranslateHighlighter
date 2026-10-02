@@ -5,10 +5,12 @@ Génération des captures, GIFs, vidéo et visuels store. Tout est régénérabl
 ## Source des visuels
 
 - **Captures : extension réelle** chargée dans Chrome for Testing (`--load-extension`),
-  profil jetable (`mktemp`), données 100 % fictives. Aucune donnée perso, aucun presse-papiers.
+  profil jetable (`mkdtemp`), données 100 % fictives. Aucune donnée perso, aucun presse-papiers.
   La traduction affichée est la réponse réelle de l'API Google Translate sur l'article fictif.
-- Page d'article fictive : `demo-article.html` (« The Meridian Gazette » — lieux et personnes
-  inventés, mention explicite dans le pied de page).
+- Page d'article fictive : `demo-article.html` — « The Aurelle Review », éditoriale sombre
+  (lieu et personnages inventés, mention explicite dans le pied de page).
+- Photo : `assets/lighthouse-sunset-1280.webp` — *Lighthouse at Sunset*, Francis Augustus Silva,
+  **domaine public** (Wikimedia Commons), créditée dans le pied de page de la page de démo.
 - **Cadres navigateur à 3 points = cadre de présentation**, pas une capture native de Chrome.
 - **Menu réglages de la landing = illustration** reconstruite en HTML/CSS ; le menu natif du
   navigateur n'est pas capturable in-page. Signalé comme tel sur la landing.
@@ -16,6 +18,20 @@ Génération des captures, GIFs, vidéo et visuels store. Tout est régénérabl
   le produit). Spinner, popup et traductions sont réels.
 - Aucun wallpaper de la bibliothèque commune n'est utilisé (fond uni + dégradé radial dans le
   marquee) — donc aucun `provenance.json` requis.
+
+## Pourquoi Chrome for Testing plutôt qu'Ego
+
+`ego-browser` (ego lite, Chromium 152) est le navigateur demandé pour les interactions, mais son
+build n'expose **pas** le domaine CDP `Extensions` (`Extensions.loadUnpacked` → *« Method not
+available »*, et `task.cdp` n'accepte que Target./Browser.). Charger une extension non empaquetée
+dans Ego demande donc une action manuelle : « Charger l'extension non empaquetée » → `⌘⇧G` →
+`…/src`. Une fois chargée, les interactions (sélection, popup, substitution, page entière) sont
+pilotables dans Ego.
+
+En attendant, le repli automatisé reste `puppeteer-core` + Chrome for Testing : seul chemin qui
+accepte `--load-extension` depuis Chrome 137. Vérifier avant chaque capture que le dossier chargé
+est bien `src/` (et non `release/<version>/`) et que la carte affiche la version du `manifest.json`
+courant — sinon les captures mentent sur le produit.
 
 ## Prérequis
 

@@ -3,84 +3,138 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Meridian Gazette — The Lighthouse of Cape Aurelle</title>
+<title>The Aurelle Review — The light that keeps the coast honest</title>
 <style>
-  /* Scene de capture : article fictif, donnees 100% inventees. */
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  /* Page de démonstration pour les captures produit.
+     Design éditorial sombre ; lieu et personnages fictifs.
+     Photo : "Lighthouse at Sunset", Francis Augustus Silva — domaine public (Wikimedia Commons). */
+  :root {
+    --bg: #0b0b0d;
+    --bg-soft: #101013;
+    --card: #141417;
+    --line: rgba(255,255,255,.10);
+    --text: #f5f3ef;
+    --body: #cfccc5;
+    --muted: #8b8880;
+    --accent: #e8b36a;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { -webkit-font-smoothing: antialiased; }
   body {
-    font-family: Georgia, 'Times New Roman', serif;
-    background: #faf8f4;
-    color: #1a1a1a;
+    background: radial-gradient(1100px 700px at 78% -8%, #17171c 0%, var(--bg) 58%) no-repeat, var(--bg);
+    color: var(--body);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     line-height: 1.7;
+    padding-bottom: 40px;
   }
-  .site-header {
-    background: #14342b;
-    color: #f4efe6;
-    padding: 18px 48px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 40px; }
+
+  header.nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 26px 0 24px; border-bottom: 1px solid var(--line);
   }
-  .site-header .brand { font-size: 22px; letter-spacing: 1px; font-weight: bold; }
-  .site-header nav { font-family: Helvetica, Arial, sans-serif; font-size: 13px; }
-  .site-header nav span { margin-left: 22px; opacity: .85; }
-  main { max-width: 720px; margin: 0 auto; padding: 56px 24px 80px; }
-  .kicker {
-    font-family: Helvetica, Arial, sans-serif;
-    font-size: 12px; letter-spacing: 2.5px; text-transform: uppercase;
-    color: #9a6b2f; margin-bottom: 14px;
+  .brand { display:flex; align-items:center; gap:10px; color:var(--text); font-weight:600; font-size:14.5px; letter-spacing:-.01em; }
+  .brand i { width:9px; height:9px; border-radius:50%; background:var(--accent); display:inline-block; }
+  .nav nav { display:flex; gap:26px; font-size:13.5px; color:var(--muted); }
+  .nav nav span:first-child { color: var(--text); }
+
+  .kicker { margin: 74px 0 20px; font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); font-weight:600; }
+
+  h1 {
+    color: var(--text); max-width: 15ch;
+    font-size: clamp(44px, 6.4vw, 78px); line-height: 1.03;
+    letter-spacing: -.05em; font-weight: 700;
   }
-  h1 { font-size: 44px; line-height: 1.15; margin-bottom: 18px; font-weight: normal; }
-  .standfirst { font-size: 20px; color: #555; font-style: italic; margin-bottom: 28px; }
-  .byline {
-    font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: #777;
-    border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;
-    padding: 10px 0; margin-bottom: 36px;
+  .standfirst {
+    max-width: 58ch; margin: 26px 0 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 22px; line-height: 1.55; color:#b9b6ae;
   }
-  article p { margin-bottom: 24px; font-size: 18px; }
-  h2 { font-size: 28px; margin: 40px 0 16px; font-weight: normal; }
-  figure { margin: 36px 0; }
-  figure .placeholder {
-    background: linear-gradient(135deg, #d8cfc0, #b8ab93);
-    height: 300px; border-radius: 4px;
-    display: flex; align-items: center; justify-content: center;
-    color: #6b5f49; font-family: Helvetica, Arial, sans-serif; font-size: 13px; letter-spacing: 1px;
+  .byline { margin-top: 28px; font-size:13px; color:var(--muted); }
+  .byline b { color:#dcd9d2; font-weight:600; }
+
+  figure.hero {
+    margin: 54px 0 0; border-radius: 18px; overflow: hidden;
+    border: 1px solid var(--line); background: var(--card);
   }
-  figcaption { font-size: 13px; color: #888; margin-top: 10px; font-style: italic; }
-  .site-footer {
-    background: #14342b; color: #cfc8ba; text-align: center;
-    padding: 28px; font-family: Helvetica, Arial, sans-serif; font-size: 13px;
+  figure.hero img { width:100%; display:block; aspect-ratio: 16/9; object-fit: cover; object-position: center 72%; }
+  figure.hero figcaption { padding: 14px 18px; font-size:12.5px; color:var(--muted); }
+
+  .cols { display:grid; grid-template-columns: minmax(0,1fr) 300px; gap: 72px; margin-top: 66px; align-items: start; }
+  article { max-width: 660px; }
+  article p { margin-bottom: 26px; font-size: 19px; line-height: 1.78; }
+  article h2 {
+    color: var(--text); margin: 52px 0 18px;
+    font-size: 32px; line-height: 1.15; letter-spacing: -.035em; font-weight: 650;
+  }
+  blockquote {
+    margin: 40px 0; padding: 4px 0 4px 26px; border-left: 2px solid var(--accent);
+    font-family: Georgia, serif; font-size: 24px; line-height: 1.45; color: var(--text);
+  }
+  blockquote cite { display:block; margin-top:12px; font-size:13px; color:var(--muted); font-style: normal; font-family: inherit; }
+
+  aside .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 22px; }
+  aside .card h3 { color: var(--text); font-size: 14px; margin-bottom: 16px; letter-spacing:-.01em; }
+  aside dl { display:grid; grid-template-columns: 1fr auto; gap: 12px 14px; font-size: 14px; margin:0; }
+  aside dt { color: var(--muted); }
+  aside dd { margin:0; color: var(--text); font-variant-numeric: tabular-nums; }
+  aside .note { margin-top: 18px; font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+  footer.credit {
+    margin-top: 76px; padding-top: 26px; border-top: 1px solid var(--line);
+    font-size: 12.5px; color: var(--muted);
   }
 </style>
 </head>
 <body>
-<header class="site-header">
-  <div class="brand">The Meridian Gazette</div>
-  <nav><span>World</span><span>Science</span><span>Coastlines</span><span>Archive</span></nav>
-</header>
-<main>
-  <p class="kicker">Coastlines · Issue No. 214</p>
-  <h1>The Lighthouse of Cape Aurelle Keeps Its Quiet Vigil</h1>
-  <p class="standfirst">On the last untamed bend of the northern coast, a lighthouse keeper and his dog maintain a rhythm older than the radio.</p>
-  <p class="byline">By Marianne Ostrow · Photographs by the author · October 2026</p>
+<div class="wrap">
+  <header class="nav">
+    <div class="brand"><i></i> The Aurelle Review</div>
+    <nav><span>Field Notes</span><span>Coastlines</span><span>Archive</span><span>Subscribe</span></nav>
+  </header>
 
-  <article id="article">
-    <p id="p1">The road to Cape Aurelle ends where the gravel gives way to salt grass, and the last mile must be walked. For sixty-two years, the lighthouse at the end of that path has swept its white beam across the water every seven seconds, never once missing its appointment with the dark.</p>
-    <p id="p2">Elias Verdan, the keeper of the light, inherited the post from his father and his grandfather before him. He wakes at dusk, winds the old brass clockwork, and climbs the one hundred and twelve steps of the spiral staircase with a thermos of black coffee and a small notebook in which he records the weather, the passing ships, and the mood of the sea.</p>
+  <p class="kicker">Field Notes · Issue 07 · Winter</p>
+  <h1 id="title">The light that keeps the coast honest</h1>
+  <p class="standfirst">For sixty-two winters, one keeper has walked the same hundred and twelve steps to keep a promise the sea keeps asking him to renew.</p>
+  <p class="byline">Words by <b>Alma Reyes</b> · Cape Aurelle, 3:40 pm · Photography from the archive</p>
 
-    <figure>
-      <div class="placeholder">PHOTOGRAPH · CAPE AURELLE AT FIRST LIGHT</div>
-      <figcaption>The tower at dawn, photographed from the eastern rocks.</figcaption>
-    </figure>
+  <figure class="hero">
+    <img src="assets/lighthouse-sunset-1280.webp" alt="A lighthouse at sunset, its beam reaching across calm water.">
+    <figcaption>Cape Aurelle at the turn of the light. Painting: Francis Augustus Silva, public domain.</figcaption>
+  </figure>
 
-    <p id="p3">The village below counts fewer than ninety inhabitants in winter. Most of them keep boats, and all of them keep the lighthouse in their prayers, as their grandmothers taught them. When the fog rolls in from the open water, thick as wool, the keeper sounds the great horn twice each minute, and the fishermen count the seconds between the blasts to know where they are.</p>
+  <div class="cols">
+    <article id="article">
+      <p id="p1">The road ends at the last farm gate, and the rest belongs to the sea. Elias Verdan has made the final mile on foot every evening since he was nineteen, carrying a thermos, a notebook, and the small brass key that opens the lantern room.</p>
+      <p id="p2">The tower was built in 1864 by a shipping company that no longer exists, and the mechanism inside it has never been replaced. It is wound by hand. It will keep turning long after everyone who remembers how has gone.</p>
+      <blockquote>The light is not a warning. It is a promise, made on schedule, to people we will never meet.<cite>Elias Verdan, keeper</cite></blockquote>
+      <h2 id="h2-1">Seven seconds, then again</h2>
+      <p id="p3">The beam crosses the water every seven seconds, night after night, and the village below counts the rhythm without ever looking up. Fishermen say they can feel the sweep on their shoulders the way a room feels a door open.</p>
+      <p id="p4">In fog the keeper sounds the horn twice a minute. The older families still teach children to count the blasts and know their own distance from the rocks, a small arithmetic passed from mother to daughter in a coast with no other inheritance.</p>
+      <h2 id="h2-2">What the birds taught him</h2>
+      <p id="p5">When the migrating geese return in spring, Elias dims the lamp by a single degree so that nothing blinds them on the climb. No regulation asks him to. His grandmother did it, and he never stopped, and the maritime office has never once asked why.</p>
+      <p id="p6">Ask him what he will do when the light is automated, and he looks at the horizon for a long time before answering. Then he says the same thing he says at midnight, with the dog on his feet and the glass going dark below them: the beam is not ours to switch off. It is ours to keep.</p>
+    </article>
 
-    <h2>A rhythm older than the radio</h2>
-    <p id="p4">Modern navigation has made the lighthouse a courtesy rather than a necessity, but nobody on the cape speaks of it that way. The beam is a promise. Children in the village fall asleep to the sweep of light across their ceilings, and travelers who see it from the ferries say it feels like being greeted by name.</p>
-    <p id="p5">In spring, when the migrating birds return, the keeper dims the lamp by a single degree to spare their bearings, a habit begun by his grandmother and continued without any written rule. The maritime office in the capital has never asked him to. The sea, everyone agrees, prefers courtesy to regulation.</p>
-    <p id="p6">At midnight, Elias sits on the gallery deck with his dog Plume and watches the horizon arrange itself into shades of blue and silver. The light turns above their heads, patient and unhurried. Somewhere beyond the sandbars, a fishing boat is finding its way home, and the lighthouse, as it has for three generations, is showing it the door.</p>
-  </article>
-</main>
-<footer class="site-footer">The Meridian Gazette · A fictional newspaper created for product photography · All places and persons are invented</footer>
+    <aside>
+      <div class="card">
+        <h3>The lighthouse, in numbers</h3>
+        <dl>
+          <dt>Built</dt><dd>1864</dd>
+          <dt>Keeper since</dt><dd>1964</dd>
+          <dt>Steps to the lantern</dt><dd>112</dd>
+          <dt>Beam interval</dt><dd>7 s</dd>
+          <dt>Fog signal</dt><dd>2 blasts / min</dd>
+        </dl>
+        <p class="note">Fictional coast, fictional keeper. Page built to exercise a translation extension — no real place, person, or vessel.</p>
+      </div>
+    </aside>
+  </div>
+
+  <footer class="credit">
+    The Aurelle Review — a fictional editorial created as product photography for PK Traduction.
+    Painting: <i>Lighthouse at Sunset</i> by Francis Augustus Silva (public domain, Wikimedia Commons).
+  </footer>
+</div>
 </body>
 </html>
