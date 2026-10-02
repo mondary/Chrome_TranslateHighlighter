@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "PK Traduction",
-  "version": "2026.06.2",
+  "version": "2026.10.01",
   "description": "Instant translation with popup display. Made by PK-Labs.",
   "short_name": "PK-Labs Trad",
   "permissions": [

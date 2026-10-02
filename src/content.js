@@ -12,7 +12,7 @@ let settings = {
 };
 
 // Load settings from storage
-chrome.storage.sync.get(['targetLanguage', 'autoTranslate'], (result) => {
+chrome.storage.sync.get(['targetLanguage', 'autoTranslate', 'substituteTranslate'], (result) => {
   settings = { ...settings, ...result };
 });
 

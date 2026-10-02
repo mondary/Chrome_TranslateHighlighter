@@ -7,10 +7,11 @@ const DEFAULT_SETTINGS = {
 
 // Initialize settings
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.sync.get(['targetLanguage', 'autoTranslate'], (result) => {
+  chrome.storage.sync.get(['targetLanguage', 'autoTranslate', 'substituteTranslate'], (result) => {
     const settings = {
       targetLanguage: result.targetLanguage || DEFAULT_SETTINGS.targetLanguage,
-      autoTranslate: result.autoTranslate === undefined ? DEFAULT_SETTINGS.autoTranslate : result.autoTranslate
+      autoTranslate: result.autoTranslate === undefined ? DEFAULT_SETTINGS.autoTranslate : result.autoTranslate,
+      substituteTranslate: result.substituteTranslate === undefined ? DEFAULT_SETTINGS.substituteTranslate : result.substituteTranslate
     };
     chrome.storage.sync.set(settings);
   });
