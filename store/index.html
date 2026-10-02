@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PK Traduction — Traduction instantanée, sans quitter la page</title>
+<meta name="description" content="Traduction instantanée du texte sélectionné : popup, substitution directe ou page entière. Extension Chrome gratuite et open source par PK-Labs.">
+<meta property="og:title" content="PK Traduction — Traduction instantanée, sans quitter la page">
+<meta property="og:description" content="Popup, substitution directe ou page entière : la traduction s'affiche instantanément. Extension Chrome gratuite et open source.">
+<meta property="og:image" content="assets/card-1200x630.png">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="icon.png">
+<script>
+/* Langue appliquée AVANT premier rendu : choix manuel mémorisé, sinon
+   première langue prise en charge dans navigator.languages, sinon
+   navigator.language, sinon FR. Sans JS : le FR du HTML reste lisible. */
+(function () {
+  var lang = 'fr';
+  try { lang = localStorage.getItem('pkt-lang') || lang; } catch (e) {}
+  if (lang !== 'en' && lang !== 'fr') {
+    var prefs = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language];
+    for (var i = 0; i < prefs.length; i++) {
+      var l = String(prefs[i] || '').toLowerCase();
+      if (l.indexOf('fr') === 0) { lang = 'fr'; break; }
+      if (l.indexOf('en') === 0) { lang = 'en'; break; }
+    }
+  }
+  document.documentElement.setAttribute('data-lang', lang);
+  document.documentElement.lang = lang;
+  window.__pktLang = lang;
+  window.__pktSetLang = function (l) {
+    document.documentElement.setAttribute('data-lang', l);
+    document.documentElement.lang = l;
+    try { localStorage.setItem('pkt-lang', l); } catch (e) {}
+    window.__pktLang = l;
+    document.title = l === 'en'
+      ? 'PK Traduction — Instant translation, without leaving the page'
+      : 'PK Traduction — Traduction instantanée, sans quitter la page';
+    var md = document.querySelector('meta[name="description"]');
+    if (md) md.setAttribute('content', l === 'en'
+      ? 'Instant translation of selected text: popup, direct substitution or full page. Free, open-source Chrome extension by PK-Labs.'
+      : 'Traduction instantanée du texte sélectionné : popup, substitution directe ou page entière. Extension Chrome gratuite et open source par PK-Labs.');
+    document.querySelectorAll('img[data-alt-en]').forEach(function (img) {
+      img.alt = l === 'en' ? img.getAttribute('data-alt-en') : img.getAttribute('data-alt-fr');
+    });
+  };
+  if (lang === 'en') { /* appliqué après DOM pour les attributs, CSS couvre le texte */ }
+})();
+</script>
+<style>
+  :root {
+    --bg: #0a0a0b;
+    --panel: #131315;
+    --panel2: #17171a;
+    --line: #232327;
+    --text: #f2f0ec;
+    --muted: #a6a29b;
+    --accent: #f2a33c;
+    --accent-ink: #1c1204;
+    --radius: 14px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: var(--accent); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---- i18n : paires FR/EN, bascule CSS sans flash ---- */
+  .en { display: none; }
+  html[data-lang="en"] .fr { display: none; }
+  html[data-lang="en"] .en { display: inline; }
+  html[data-lang="en"] div.en { display: block; }
+  html[data-lang="en"] li.en { display: list-item; }
+
+  /* ---- header ---- */
+  header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(10,10,11,.82);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15px; color: var(--text); text-decoration: none; }
+  .brand img { width: 26px; height: 26px; border-radius: 6px; }
+  .lang-switch { display: flex; gap: 2px; background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
+  .lang-switch button {
+    border: 0; background: transparent; color: var(--muted);
+    font: inherit; font-size: 12.5px; font-weight: 600;
+    padding: 5px 12px; border-radius: 999px; cursor: pointer;
+  }
+  .lang-switch button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+
+  /* ---- hero ---- */
+  .hero { padding: 88px 0 40px; text-align: center; }
+  .kicker {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    border-radius: 999px; padding: 7px 16px; margin-bottom: 30px;
+  }
+  h1 {
+    font-size: clamp(2.5rem, 6.4vw, 4.5rem);
+    line-height: 1.04; letter-spacing: -0.025em; font-weight: 700;
+    max-width: 15ch; margin: 0 auto 22px;
+  }
+  .hero p.lead {
+    color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.3rem);
+    max-width: 58ch; margin: 0 auto 36px;
+  }
+  .cta-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-weight: 600; font-size: 15.5px; text-decoration: none;
+    padding: 13px 24px; border-radius: 999px; border: 1px solid transparent;
+    transition: transform .25s ease, opacity .25s ease;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary { background: var(--accent); color: var(--accent-ink); }
+  .btn-kofi { background: transparent; color: var(--text); border-color: var(--line); }
+  .btn-kofi:hover { border-color: var(--accent); }
+  .btn-kofi svg { flex: none; }
+
+  /* ---- mockup navigateur (cadre de présentation) ---- */
+  .mockup {
+    max-width: 920px; margin: 64px auto 0;
+    background: #1d1d20; border: 1px solid var(--line);
+    border-radius: var(--radius); overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,.55);
+  }
+  .mockup-bar { display: flex; gap: 7px; padding: 13px 16px; background: #1d1d20; }
+  .mockup-bar i { width: 11px; height: 11px; border-radius: 50%; background: #3a3a3f; }
+  .mockup img { width: 100%; }
+
+  /* ---- sections ---- */
+  section { padding: 96px 0; }
+  .sec-head { max-width: 640px; margin: 0 auto 56px; text-align: center; }
+  h2 { font-size: clamp(1.8rem, 3.6vw, 2.6rem); letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 14px; }
+  .sec-head p { color: var(--muted); font-size: 1.08rem; }
+  .note { display: block; margin-top: 14px; font-size: .85rem; color: var(--muted); }
+
+  .frame {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: var(--radius); overflow: hidden;
+    box-shadow: 0 24px 60px rgba(0,0,0,.4);
+  }
+  figcaption { padding: 14px 18px; font-size: .88rem; color: var(--muted); background: var(--panel); }
+
+  /* démo gif */
+  .demo-frame { max-width: 860px; margin: 0 auto; }
+
+  /* modes */
+  .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .mode h3 { font-size: 1.15rem; margin: 20px 0 8px; }
+  .mode p { color: var(--muted); font-size: .98rem; }
+  .mode .tag { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .08em; color: var(--accent); margin-bottom: 2px; }
+
+  /* avant / après */
+  .ba { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .ba figure { position: relative; }
+  .ba .chip {
+    position: absolute; top: 14px; left: 14px; z-index: 2;
+    font-size: 11.5px; font-weight: 700; letter-spacing: .06em;
+    background: rgba(10,10,11,.78); color: var(--text);
+    border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px;
+    backdrop-filter: blur(6px);
+  }
+  .ba .chip.francais { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+
+  /* réglages */
+  .settings { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center; }
+  .settings-copy h2 { text-align: left; }
+  .settings-copy p { color: var(--muted); margin-bottom: 18px; }
+  .lang-list { list-style: none; display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+  .lang-list li {
+    border: 1px solid var(--line); background: var(--panel);
+    border-radius: 999px; padding: 7px 16px; font-size: 14px;
+  }
+  .menu-illus {
+    background: var(--panel2); border: 1px solid var(--line); border-radius: 12px;
+    padding: 10px; font-size: 14px; max-width: 340px; margin-left: auto;
+    box-shadow: 0 24px 60px rgba(0,0,0,.4);
+  }
+  .menu-illus .mi { padding: 9px 12px; border-radius: 8px; color: #d8d5cf; }
+  .menu-illus .mi.head { color: var(--muted); font-weight: 600; }
+  .menu-illus .mi.sel { background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--text); }
+  .menu-illus .sep { height: 1px; background: var(--line); margin: 6px 8px; }
+  .illus-label { font-size: .78rem; color: var(--muted); text-align: right; margin-top: 10px; }
+
+  /* installation */
+  .install { max-width: 720px; margin: 0 auto; }
+  ol.steps { list-style: none; counter-reset: step; margin: 36px 0 26px; }
+  ol.steps li { counter-increment: step; display: flex; gap: 18px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  ol.steps li::before {
+    content: counter(step);
+    flex: none; width: 30px; height: 30px; border-radius: 50%;
+    background: var(--panel); border: 1px solid var(--line);
+    color: var(--accent); font-weight: 700; font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  ol.steps code {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 6px; padding: 2px 7px; font-size: .88em; color: var(--accent);
+  }
+  .store-note { color: var(--muted); font-size: .92rem; margin-top: 8px; }
+  .support-line { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin-top: 34px; }
+  .support-line .small { color: var(--muted); font-size: .92rem; }
+
+  /* footer */
+  footer { border-top: 1px solid var(--line); padding: 40px 0 56px; }
+  .foot { display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap; color: var(--muted); font-size: .9rem; }
+  .foot a { color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--line); padding-bottom: 1px; }
+  .foot a:hover { color: var(--text); border-color: var(--accent); }
+  .foot .links { display: flex; gap: 18px; flex-wrap: wrap; }
+
+  /* reveals (mouvement : transform/opacity uniquement) */
+  html.js .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+  html.js .reveal.on { opacity: 1; transform: none; }
+  html.js .hero .reveal { transition-delay: .08s; }
+  @media (prefers-reduced-motion: reduce) {
+    html.js .reveal { opacity: 1; transform: none; transition: none; }
+    .btn:hover { transform: none; }
+  }
+
+  /* responsive */
+  @media (max-width: 860px) {
+    .settings { grid-template-columns: 1fr; }
+    .menu-illus { margin: 0 auto; }
+    .illus-label { text-align: center; }
+    section { padding: 72px 0; }
+  }
+  @media (max-width: 680px) {
+    .modes, .ba { grid-template-columns: 1fr; }
+    .hero { padding-top: 64px; }
+    .mockup { margin-top: 44px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#">
+      <img src="icon.png" alt="">
+      <span>PK Traduction</span>
+    </a>
+    <div class="lang-switch" role="group" aria-label="Choix de la langue / Language choice">
+      <button type="button" id="btn-fr" aria-pressed="true">FR</button>
+      <button type="button" id="btn-en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <div class="wrap hero">
+    <span class="kicker reveal"><span class="fr">Extension Chrome · Gratuite · Open Source</span><span class="en">Chrome extension · Free · Open Source</span></span>
+    <h1 class="reveal">
+      <span class="fr">Le web, traduit sous vos yeux.</span>
+      <span class="en">The web, translated before your eyes.</span>
+    </h1>
+    <p class="lead reveal">
+      <span class="fr">Sélectionnez du texte : la traduction apparaît instantanément, en popup ou par substitution. Une page entière se traduit d'un clic sur l'icône. Sans onglet, sans copier-coller.</span>
+      <span class="en">Select some text: the translation appears instantly, as a popup or by substitution. A whole page translates with one click on the icon. No extra tab, no copy-paste.</span>
+    </p>
+    <div class="cta-row reveal">
+      <a class="btn btn-primary" href="#installer">
+        <span class="fr">Installer l'extension</span><span class="en">Install the extension</span>
+      </a>
+      <a class="btn btn-kofi" href="https://ko-fi.com/pouark" target="_blank" rel="noopener noreferrer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M5 6h11a3 3 0 0 1 3 3v1a3 3 0 0 1-1.2 2.4A5.5 5.5 0 0 1 12.5 17h-2A5.5 5.5 0 0 1 5 11.5V6Z" stroke="currentColor" stroke-width="1.7"/>
+          <path d="M19 8.5h.8a1.7 1.7 0 0 1 0 3.4H19" stroke="currentColor" stroke-width="1.7"/>
+          <path d="M12 9.2c-.9-1.9-3.6-.6-2.5 1.2.5.9 2.5 1.9 2.5 1.9s2-1 2.5-1.9c1.1-1.8-1.6-3.1-2.5-1.2Z" fill="currentColor"/>
+        </svg>
+        <span class="fr">Soutenir sur Ko-fi</span><span class="en">Support on Ko-fi</span>
+      </a>
+    </div>
+
+    <figure class="mockup reveal">
+      <div class="mockup-bar" aria-hidden="true"><i></i><i></i><i></i></div>
+      <picture>
+        <source type="image/webp" srcset="screenshots/01-selection-popup.webp">
+        <img src="screenshots/01-selection-popup.png" width="1280" height="800"
+             data-alt-fr="Un article en anglais : la phrase sélectionnée est traduite dans un popup qui s'affiche dessous."
+             data-alt-en="An English article: the selected phrase is translated in a popup shown right below it."
+             alt="Un article en anglais : la phrase sélectionnée est traduite dans un popup qui s'affiche dessous."
+             fetchpriority="high">
+      </picture>
+    </figure>
+  </div>
+
+  <!-- DÉMO -->
+  <section id="demo">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <h2><span class="fr">Un geste, une traduction</span><span class="en">One gesture, one translation</span></h2>
+        <p><span class="fr">La boucle ci-dessous est une capture réelle de l'extension : sélection, chargement, popup traduit.</span><span class="en">The loop below is a real capture of the extension: selection, loading, translated popup.</span></p>
+      </div>
+      <figure class="frame demo-frame reveal">
+        <picture>
+          <source media="(max-width: 640px)" srcset="gifs/demo-compact.gif">
+          <img src="gifs/demo-wide.gif" width="960" height="540" loading="lazy" decoding="async"
+               data-alt-fr="Boucle animée : le curseur sélectionne une phrase, un indicateur de chargement apparaît, puis la traduction s'affiche dans un popup."
+               data-alt-en="Animated loop: the cursor selects a sentence, a loading indicator appears, then the translation shows in a popup."
+               alt="Boucle animée : le curseur sélectionne une phrase, un indicateur de chargement apparaît, puis la traduction s'affiche dans un popup.">
+        </picture>
+        <figcaption>
+          <span class="fr">Capture réelle, article fictif « The Meridian Gazette ». Traduction vers le français.</span>
+          <span class="en">Real capture, fictional article “The Meridian Gazette”. Translated into French.</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- MODES -->
+  <section id="modes">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <h2><span class="fr">Deux modes, un réglage</span><span class="en">Two modes, one setting</span></h2>
+        <p><span class="fr">Lire discrètement ou réécrire sur place : le mode se change depuis le menu de l'icône.</span><span class="en">Read discreetly or rewrite in place: switch modes from the icon menu.</span></p>
+      </div>
+      <div class="modes">
+        <div class="mode reveal">
+          <figure class="frame">
+            <picture>
+              <source type="image/webp" srcset="screenshots/01-selection-popup.webp">
+              <img src="screenshots/01-selection-popup.png" width="1280" height="800" loading="lazy" decoding="async"
+                   data-alt-fr="La traduction s'affiche dans un popup sous le texte sélectionné."
+                   data-alt-en="The translation appears in a popup under the selected text."
+                   alt="La traduction s'affiche dans un popup sous le texte sélectionné.">
+            </picture>
+          </figure>
+          <span class="tag"><span class="fr">Mode popup</span><span class="en">Popup mode</span></span>
+          <h3><span class="fr">Popup éclair</span><span class="en">Instant popup</span></h3>
+          <p><span class="fr">La traduction s'affiche juste sous la sélection, largeur assortie, position recalculée au défilement.</span><span class="en">The translation shows right under the selection, width matched, repositioned on scroll.</span></p>
+        </div>
+        <div class="mode reveal">
+          <figure class="frame">
+            <picture>
+              <source type="image/webp" srcset="screenshots/02-substitution.webp">
+              <img src="screenshots/02-substitution.png" width="1280" height="800" loading="lazy" decoding="async"
+                   data-alt-fr="Le texte sélectionné a été remplacé sur place par sa traduction française."
+                   data-alt-en="The selected text was replaced in place by its French translation."
+                   alt="Le texte sélectionné a été remplacé sur place par sa traduction française.">
+            </picture>
+          </figure>
+          <span class="tag"><span class="fr">Mode substitution</span><span class="en">Substitution mode</span></span>
+          <h3><span class="fr">Substitution directe</span><span class="en">Direct substitution</span></h3>
+          <p><span class="fr">Le texte sélectionné est remplacé par sa traduction, sur place, sans popup.</span><span class="en">The selected text is replaced by its translation, in place, no popup.</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE ENTIÈRE -->
+  <section id="page">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <h2><span class="fr">Une page entière, un clic</span><span class="en">A full page, one click</span></h2>
+        <p><span class="fr">Cliquez sur l'icône de l'extension : les textes de la page active sont traduits par lots, avec indicateur de chargement.</span><span class="en">Click the extension icon: the active page's text is translated in batches, with a loading indicator.</span></p>
+      </div>
+      <div class="ba">
+        <figure class="frame reveal">
+          <span class="chip"><span class="fr">Avant · EN</span><span class="en">Before · EN</span></span>
+          <picture>
+            <source type="image/webp" srcset="screenshots/04-page-origine.webp">
+            <img src="screenshots/04-page-origine.png" width="1280" height="800" loading="lazy" decoding="async"
+                 data-alt-fr="Article fictif en anglais avant traduction."
+                 data-alt-en="Fictional English article before translation."
+                 alt="Article fictif en anglais avant traduction.">
+          </picture>
+        </figure>
+        <figure class="frame reveal">
+          <span class="chip francais">FR</span>
+          <picture>
+            <source type="image/webp" srcset="screenshots/03-page-traduite.webp">
+            <img src="screenshots/03-page-traduite.png" width="1280" height="800" loading="lazy" decoding="async"
+                 data-alt-fr="La même page entièrement traduite en français, mise en page conservée."
+                 data-alt-en="The same page fully translated into French, layout preserved."
+                 alt="La même page entièrement traduite en français, mise en page conservée.">
+          </picture>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- RÉGLAGES -->
+  <section id="reglages">
+    <div class="wrap settings">
+      <div class="settings-copy reveal">
+        <h2><span class="fr">Cinq langues, deux modes</span><span class="en">Five languages, two modes</span></h2>
+        <p><span class="fr">Tout se règle depuis le menu contextuel de l'icône : la langue cible et le mode de traduction. Le choix est synchronisé entre vos appareils.</span><span class="en">Everything is set from the toolbar icon's context menu: the target language and the translation mode. Your choice syncs across devices.</span></p>
+        <ul class="lang-list">
+          <li>🇫🇷 Français</li><li>🇬🇧 English</li><li>🇪🇸 Español</li><li>🇩🇪 Deutsch</li><li>🇮🇹 Italiano</li>
+        </ul>
+      </div>
+      <div class="reveal">
+        <div class="menu-illus" role="img"
+             data-aria-fr="Illustration du menu contextuel de l'icône : langue cible et mode de traduction."
+             data-aria-en="Illustration of the icon's context menu: target language and translation mode."
+             aria-label="Illustration du menu contextuel de l'icône : langue cible et mode de traduction.">
+          <div class="mi head">🌐 Target Language</div>
+          <div class="mi sel">🇫🇷 French</div>
+          <div class="mi">🇬🇧 English</div>
+          <div class="mi">🇪🇸 Spanish</div>
+          <div class="mi">🇩🇪 German</div>
+          <div class="mi">🇮🇹 Italian</div>
+          <div class="sep"></div>
+          <div class="mi head">🔄 Translation Mode</div>
+          <div class="mi">🔍 Show in Popup</div>
+          <div class="mi sel">🔁 Replace Text</div>
+        </div>
+        <p class="illus-label">
+          <span class="fr">Illustration du menu de l'icône — le menu natif n'est pas capturable.</span>
+          <span class="en">Illustration of the icon menu — the native menu can't be screenshotted.</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTALLATION -->
+  <section id="installer">
+    <div class="wrap install">
+      <div class="sec-head reveal">
+        <h2><span class="fr">Installer PK Traduction</span><span class="en">Install PK Traduction</span></h2>
+        <p><span class="fr">Gratuit et open source, en quatre étapes.</span><span class="en">Free and open source, in four steps.</span></p>
+      </div>
+      <ol class="steps reveal">
+        <li><span><span class="fr">Téléchargez ou clonez le dépôt GitHub.</span><span class="en">Download or clone the GitHub repository.</span></span></li>
+        <li><span><span class="fr">Ouvrez <code>chrome://extensions/</code> dans Chrome.</span><span class="en">Open <code>chrome://extensions/</code> in Chrome.</span></span></li>
+        <li><span><span class="fr">Activez le <strong>Mode développeur</strong>.</span><span class="en">Enable <strong>Developer mode</strong>.</span></span></li>
+        <li><span><span class="fr">Cliquez sur <strong>Charger l'extension non empaquetée</strong> et sélectionnez le dossier <code>/src</code>.</span><span class="en">Click <strong>Load unpacked</strong> and select the <code>/src</code> folder.</span></span></li>
+      </ol>
+      <p class="store-note">
+        <span class="fr">📌 Fiche Chrome Web Store en cours de publication — ce texte sera remplacé par le lien officiel dès qu'elle est en ligne.</span>
+        <span class="en">📌 Chrome Web Store listing in progress — this note will be replaced by the official link once live.</span>
+      </p>
+      <div class="support-line reveal">
+        <a class="btn btn-kofi" href="https://ko-fi.com/pouark" target="_blank" rel="noopener noreferrer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 6h11a3 3 0 0 1 3 3v1a3 3 0 0 1-1.2 2.4A5.5 5.5 0 0 1 12.5 17h-2A5.5 5.5 0 0 1 5 11.5V6Z" stroke="currentColor" stroke-width="1.7"/>
+            <path d="M19 8.5h.8a1.7 1.7 0 0 1 0 3.4H19" stroke="currentColor" stroke-width="1.7"/>
+            <path d="M12 9.2c-.9-1.9-3.6-.6-2.5 1.2.5.9 2.5 1.9 2.5 1.9s2-1 2.5-1.9c1.1-1.8-1.6-3.1-2.5-1.2Z" fill="currentColor"/>
+          </svg>
+          <span class="fr">Soutenir sur Ko-fi</span><span class="en">Support on Ko-fi</span>
+        </a>
+        <span class="small">
+          <span class="fr">PK Traduction est gratuite — un café aide à la faire vivre.</span>
+          <span class="en">PK Traduction is free — a coffee helps keep it alive.</span>
+        </span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <div>© 2026 PK-Labs · <span class="fr">v2026.10.02</span><span class="en">v2026.10.02</span></div>
+    </div>
+    <div class="links">
+      <a href="https://github.com/mondary/Chrome_TranslateHighlighter" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://mondary.design" target="_blank" rel="noopener noreferrer">mondary.design</a>
+      <a href="privacy-policy-pktraduction.html"><span class="fr">Confidentialité</span><span class="en">Privacy</span></a>
+      <a href="https://ko-fi.com/pouark" target="_blank" rel="noopener noreferrer">Ko-fi</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Bascule FR/EN : le choix manuel prime et est mémorisé si le stockage le permet.
+  (function () {
+    document.documentElement.classList.add('js');
+    var fr = document.getElementById('btn-fr'), en = document.getElementById('btn-en');
+    function apply(l) {
+      window.__pktSetLang(l);
+      fr.setAttribute('aria-pressed', String(l === 'fr'));
+      en.setAttribute('aria-pressed', String(l === 'en'));
+      document.querySelectorAll('[data-aria-fr]').forEach(function (el) {
+        el.setAttribute('aria-label', l === 'en' ? el.getAttribute('data-aria-en') : el.getAttribute('data-aria-fr'));
+      });
+    }
+    fr.addEventListener('click', function () { apply('fr'); });
+    en.addEventListener('click', function () { apply('en'); });
+    apply(window.__pktLang || 'fr');
+
+    // Reveals au défilement (désactivés si mouvement réduit)
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var els = document.querySelectorAll('.reveal');
+    if (reduce.matches || !('IntersectionObserver' in window)) {
+      els.forEach(function (el) { el.classList.add('on'); });
+    } else {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.12 });
+      els.forEach(function (el) { io.observe(el); });
+    }
+  })();
+</script>
+</body>
+</html>

@@ -20,3 +20,6 @@ build/
 .venv/
 __pycache__/
 *.log
+.inspi
+# bundle FTP généré par scripts/website.sh (déposé tel quel sur le FTP)
+store/website/

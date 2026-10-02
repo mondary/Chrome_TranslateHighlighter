@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Cartes store — PK Traduction</title>
+<style>
+  /* Gabarit de recadrage : dérive du design de la landing (store/index.html).
+     Chaque bloc a la taille EXACTE de son usage. Capture pixel-perfect via element screenshot. */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #333; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  .card {
+    background: #0a0a0b; color: #f2f0ec; position: relative; overflow: hidden;
+    display: flex; align-items: center;
+  }
+  .accent { color: #f2a33c; }
+  .muted { color: #a6a29b; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 7px;
+    border: 1px solid rgba(242,163,60,.4); color: #f2a33c;
+    border-radius: 999px; font-weight: 600;
+  }
+  .mockup { background: #1d1d20; border: 1px solid #232327; border-radius: 12px; overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,.5); }
+  .mockup .bar { display: flex; gap: 6px; padding: 10px 13px; }
+  .mockup .bar i { width: 9px; height: 9px; border-radius: 50%; background: #3a3a3f; }
+  .mockup img { display: block; width: 100%; }
+  .brandline { display: flex; align-items: center; gap: 14px; }
+  .brandline img { border-radius: 16px; }
+  h1 { letter-spacing: -0.02em; font-weight: 700; }
+
+  /* ---- card OG 1200x630 ---- */
+  #card { width: 1200px; height: 630px; padding: 64px; gap: 48px; }
+  #card .left { width: 480px; }
+  #card h1 { font-size: 58px; line-height: 1.06; margin: 22px 0 14px; }
+  #card .tagline { font-size: 22px; line-height: 1.45; }
+  #card .pill { font-size: 15px; padding: 8px 16px; margin-top: 26px; }
+  #card .brandline img { width: 56px; height: 56px; }
+  #card .brandline span { font-size: 22px; font-weight: 600; }
+  #card .mockup { width: 560px; transform: rotate(0.4deg); }
+  #card .mockup img { aspect-ratio: 16/10; object-fit: cover; object-position: top; }
+
+  /* ---- tuile CWS 440x280 ---- */
+  #tile { width: 440px; height: 280px; padding: 34px; flex-direction: column; align-items: flex-start; justify-content: center; gap: 10px; }
+  #tile .brandline img { width: 40px; height: 40px; border-radius: 10px; }
+  #tile .brandline span { font-size: 19px; font-weight: 600; }
+  #tile h1 { font-size: 33px; line-height: 1.1; }
+  #tile .tagline { font-size: 14.5px; }
+  #tile .pill { font-size: 11.5px; padding: 5px 12px; margin-top: 4px; }
+
+  /* ---- marquee 1400x560 ---- */
+  #marquee { width: 1400px; height: 560px; padding: 72px; gap: 56px;
+    background: radial-gradient(1200px 600px at 85% 15%, #1c1710 0%, #0a0a0b 55%); }
+  #marquee .left { width: 520px; }
+  #marquee h1 { font-size: 66px; line-height: 1.05; margin: 20px 0 14px; }
+  #marquee .tagline { font-size: 24px; }
+  #marquee .pill { font-size: 16px; padding: 9px 18px; margin-top: 28px; }
+  #marquee .brandline img { width: 60px; height: 60px; }
+  #marquee .brandline span { font-size: 24px; font-weight: 600; }
+  #marquee .mockup { width: 640px; transform: rotate(0.5deg); }
+  #marquee .mockup img { aspect-ratio: 16/10; object-fit: cover; object-position: top; }
+</style>
+</head>
+<body>
+
+<div class="card" id="card">
+  <div class="left">
+    <div class="brandline"><img src="../icon.png" alt=""><span>PK-Labs</span></div>
+    <h1>Le web, traduit <span class="accent">sous vos yeux.</span></h1>
+    <p class="tagline muted">Sélectionnez, c'est traduit. Popup, substitution ou page entière.</p>
+    <span class="pill">⬇ Gratuit · Open Source</span>
+  </div>
+  <div class="mockup">
+    <div class="bar" aria-hidden="true"><i></i><i></i><i></i></div>
+    <img src="../screenshots/01-selection-popup.png" alt="">
+  </div>
+</div>
+
+<div class="card" id="tile">
+  <div class="brandline"><img src="../icon.png" alt=""><span>PK Traduction</span></div>
+  <h1>Le web, traduit <span class="accent">d'un geste.</span></h1>
+  <p class="tagline muted">Popup, substitution ou page entière.</p>
+  <span class="pill">⬇ Gratuit · Open Source</span>
+</div>
+
+<div class="card" id="marquee">
+  <div class="left">
+    <div class="brandline"><img src="../icon.png" alt=""><span>PK-Labs</span></div>
+    <h1>Le web, traduit <span class="accent">sous vos yeux.</span></h1>
+    <p class="tagline muted">Sélectionnez du texte : la traduction apparaît instantanément. Une page entière se traduit d'un clic.</p>
+    <span class="pill">⬇ Gratuit · Open Source</span>
+  </div>
+  <div class="mockup">
+    <div class="bar" aria-hidden="true"><i></i><i></i><i></i></div>
+    <img src="../screenshots/01-selection-popup.png" alt="">
+  </div>
+</div>
+
+</body>
+</html>

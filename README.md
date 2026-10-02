@@ -6,17 +6,33 @@
 
 Traduction instantanée de texte avec affichage en popup ou substitution directe. Made by PK-Labs.
 
+**Landing :** [store/index.html](store/index.html) — **v2026.10.02**
+
+![Sélection → popup](store/screenshots/01-selection-popup.png)
+
 ## ✅ Fonctionnalités
 - Traduction instantanée du texte sélectionné.
 - Mode de substitution directe du texte.
 - Traduction de page entière par lots.
 - Indicateur de chargement en temps réel.
 - Interface épurée et positionnement automatique.
+- Menu de l'icône : langue cible (🇫🇷 🇬🇧 🇪🇸 🇩🇪 🇮🇹) et mode de traduction.
 
 ## 🧠 Utilisation
 - **Traduction popup :** Sélectionnez du texte sur une page web, le popup s'affiche automatiquement en dessous.
 - **Substitution directe :** Activez l'option dans les paramètres, le texte sélectionné sera remplacé.
 - **Traduction de page :** Cliquez sur l'icône de l'extension pour traduire tout le contenu de la page active.
+
+## 📸 Captures
+
+| | |
+|---|---|
+| ![Popup](store/screenshots/01-selection-popup.png) | ![Substitution](store/screenshots/02-substitution.png) |
+| *Popup sous la sélection* | *Substitution directe* |
+| ![Avant](store/screenshots/04-page-origine.png) | ![Après](store/screenshots/03-page-traduite.png) |
+| *Page entière — avant* | *Page entière — après (traduite)* |
+
+Captures réelles de l'extension sur un article fictif, générées via `store/media-kit/` (voir son [README](store/media-kit/README.md)).
 
 ## ⚙️ Réglages
 - Langue cible (défaut : français).
@@ -29,23 +45,29 @@ Traduction instantanée de texte avec affichage en popup ou substitution directe
 
 ## 📦 Build & Package
 - Les fichiers sources sont situés dans `/src`.
-- Les assets sont situés dans `/store`.
-- Un build compressé est disponible dans `/release/extension.zip`.
+- Les assets et la landing sont situés dans `/store`.
+- Un build compressé est disponible dans `/release`.
 
-## 🧪 Installation (Antigravity)
+## 🧪 Installation
 1. Téléchargez ou clonez ce dépôt.
 2. Ouvrez `chrome://extensions/` dans Chrome.
 3. Activez le **Mode développeur**.
 4. Cliquez sur **Charger l'extension non empaquetée** et sélectionnez le dossier `/src`.
 
+> 📌 La fiche Chrome Web Store est en cours de publication ; le lien officiel remplacera cette note.
+
+## ☕ Soutien
+
+PK Traduction est gratuite et open source. Si elle vous est utile, un café aide à la faire vivre : **[Soutenir sur Ko-fi](https://ko-fi.com/pouark)** ☕❤️
+
 ## 🧾 Changelog
-- 2026.06.2 : Mise à jour branding PK-Labs, noms cohérents et descriptions optimisées. Ajout icônes manquantes dans le package.
-- 2026.06.1 : Réorganisation de la structure, correction de contrastes CSS, ajout de la gestion des builds.
-- 2025.04 : Version initiale
+
+Voir [CHANGELOG.md](CHANGELOG.md) (source de vérité).
 
 ## 🔗 Liens
-- **Chrome Web Store** : [PK Traduction](https://chromewebstore.google.com/detail/)
-- **Politique de confidentialité** : [store/privacy-policy-pktraduction.html](store/privacy-policy-pktraduction.html)
-- **Site** : [mondary.design](https://mondary.design)
-- **Description** : [store/DESCRIPTION.md](store/DESCRIPTION.md)
+- **Landing :** [store/index.html](store/index.html)
+- **Politique de confidentialité :** [store/privacy-policy-pktraduction.html](store/privacy-policy-pktraduction.html)
+- **Site :** [mondary.design](https://mondary.design)
+- **Description store :** [store/description-store.md](store/description-store.md)
+- **Ko-fi :** [ko-fi.com/pouark](https://ko-fi.com/pouark)
 - EN README : [README_en.md](README_en.md)
