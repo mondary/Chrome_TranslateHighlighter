@@ -1,5 +1,16 @@
 # Changelog
 
+## [2026.11.1] - 2026-11-17
+### Fixed
+- Refus Chrome Web Store (« Purple Potassium ») : retrait de la permission `activeTab`, déclarée
+  mais jamais utilisée (le content script est déclaré statiquement et `tabs.sendMessage` ne
+  demande aucune autorisation)
+- `permissions.txt` réécrit : justifications limitées aux autorisations réellement demandées
+  (`storage`, `contextMenus`, `translate.googleapis.com`) + note sur les permissions volontairement absentes
+- Politique de confidentialité FR/EN synchronisée : suppression des lignes `activeTab` et
+  `scripting` (obsolètes), ajout du script de contenu et de l'accès `translate.googleapis.com`
+- Landing : liste de permissions mise à jour (`storage, contextMenus`)
+
 ## [2026.10.04] - 2026-10-02
 ### Changed
 - Landing refaite sur une nouvelle direction visuelle (tokens `#0a0a0a / #111 / liseré .11`,

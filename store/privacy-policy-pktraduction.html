@@ -162,10 +162,10 @@
         <section>
           <h2>Permissions Chrome</h2>
           <ul class="checklist">
-            <li><strong>activeTab</strong> : pour agir sur l'onglet actif quand l'utilisateur déclenche une traduction.</li>
             <li><strong>storage</strong> : pour conserver les préférences locales.</li>
-            <li><strong>scripting</strong> : pour injecter le script nécessaire à la traduction et à l'affichage.</li>
             <li><strong>contextMenus</strong> : pour proposer des actions rapides dans le menu contextuel.</li>
+            <li><strong>Script de contenu (pages visitées)</strong> : un script déclaré dans le manifeste lit le texte que l'utilisateur sélectionne et y affiche la traduction ; il ne transmet rien d'autre que le texte à traduire.</li>
+            <li><strong>translate.googleapis.com</strong> : accès réseau limité à l'API Google Translate pour obtenir la traduction demandée.</li>
           </ul>
         </section>
         <section>
@@ -206,10 +206,10 @@
           <section>
             <h2>Chrome Permissions</h2>
             <ul class="checklist">
-              <li><strong>activeTab</strong>: to act on the active tab when the user triggers a translation.</li>
               <li><strong>storage</strong>: to keep local preferences.</li>
-              <li><strong>scripting</strong>: to inject the script needed for translation and display.</li>
               <li><strong>contextMenus</strong>: to expose quick actions in the context menu.</li>
+              <li><strong>Content script (visited pages)</strong>: a script declared in the manifest reads the text the user selects and renders the translation in place; it sends nothing but the text to translate.</li>
+              <li><strong>translate.googleapis.com</strong>: network access limited to the Google Translate API to return the requested translation.</li>
             </ul>
           </section>
           <section>
